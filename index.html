@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script>
+    /* GitHub Pages project sites are served under /Repo-Name/ (this repo: /Net-pulse/).
+       Relative ./ assets already resolve when the URL ends with / or index.html.
+       If the path has no trailing slash, point <base> at the project directory. */
+    (function () {
+      var path = location.pathname;
+      if (path.endsWith('/index.html')) path = path.slice(0, -'index.html'.length);
+      if (path.endsWith('/')) return;
+      var base = document.createElement('base');
+      base.href = path + '/';
+      document.head.appendChild(base);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="Net Pulse — check real internet connectivity, latency, and speed on any network." />
+  <meta name="theme-color" content="#0ea5e9" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Net Pulse" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+  <link rel="icon" href="./icons/icon-192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <title>Net Pulse — Connectivity Checker</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+            <path d="M5 12c2.5-3 7.5-3 10 0" opacity=".45"/>
+            <path d="M2.5 9c4-4.5 11-4.5 15 0" opacity=".75"/>
+            <path d="M1 6c5.5-6 16.5-6 22 0"/>
+            <circle cx="12" cy="16.5" r="1.6" fill="#22d3ee" stroke="none"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Net Pulse</h1>
+          <p>Real internet &amp; speed check</p>
+        </div>
+      </div>
+      <div class="install-hint" id="installHint">Add to Home Screen</div>
+    </header>
+
+    <a class="tip-btn" href="https://cash.app/$windigo98" target="_blank" rel="noopener noreferrer">Tip on Cash App</a>
+
+    <nav class="tabs" role="tablist" aria-label="Views">
+      <a class="tab" id="tabLive" href="#live" role="tab" aria-selected="true" aria-controls="viewLive">Live</a>
+      <a class="tab" id="tabHistory" href="#history" role="tab" aria-selected="false" aria-controls="viewHistory">
+        History <span class="tab-count" id="historyCount" hidden></span>
+      </a>
+    </nav>
+
+    <main id="viewLive" role="tabpanel" aria-labelledby="tabLive">
+
+    <section class="hero">
+      <div class="indicators">
+        <div class="indicator ind-internet" id="internetInd" data-state="checking" role="group" aria-labelledby="internetHdr">
+          <p class="ind-hdr" id="internetHdr"><span class="ind-num">1</span>Internet status</p>
+          <div class="status-orb" id="statusOrb" data-state="checking" aria-hidden="true">
+            <span class="icon" id="statusIcon">…</span>
+          </div>
+          <h2 class="status-label" id="statusLabel" aria-live="polite">Checking…</h2>
+          <p class="ind-kind">Reachability</p>
+          <p class="status-sub" id="statusSub">Probing reachability &amp; quality</p>
+        </div>
+        <div class="indicator ind-link" id="linkPill" data-link="u" role="group" aria-labelledby="linkHdr">
+          <p class="ind-hdr" id="linkHdr"><span class="ind-num">2</span>Link type</p>
+          <div class="link-orb" aria-hidden="true">
+            <span class="link-icon" id="linkIcon"></span>
+          </div>
+          <h2 class="link-label" id="linkText" aria-live="polite">Unknown</h2>
+          <p class="ind-kind">Connection path</p>
+          <p class="link-note" id="linkNote">Detecting connection type…</p>
+        </div>
+      </div>
+      <p class="link-switch" id="linkSwitch" role="status" hidden></p>
+      <div class="timeline" aria-label="Recent checks: internet status and link type">
+        <span class="tl-lbl">Internet</span>
+        <div class="history" id="history" title="Internet status of recent checks"></div>
+        <span class="tl-lbl">Link</span>
+        <div class="link-strip" id="linkStrip" title="Link type of recent checks"></div>
+      </div>
+    </section>
+
+    <section class="metrics">
+      <article class="card">
+        <p class="card-label">Latency</p>
+        <p class="card-value" id="latencyValue">—<span class="unit">ms</span></p>
+        <span class="badge" id="latencyBadge" data-q="">—</span>
+      </article>
+      <article class="card">
+        <p class="card-label">Download</p>
+        <p class="card-value" id="speedValue">—<span class="unit">Mbps</span></p>
+        <span class="badge" id="speedBadge" data-q="">—</span>
+      </article>
+      <article class="card full">
+        <p class="card-label">Network details</p>
+        <div class="meta" id="netMeta">
+          <div class="meta-row"><span>Browser online</span><span id="navOnline">—</span></div>
+          <div class="meta-row"><span>Link type (API)</span><span id="linkType">—</span></div>
+          <div class="meta-row"><span>Link switches (this session)</span><span id="linkSwitches">0</span></div>
+          <div class="meta-row"><span>Effective type (speed class)</span><span id="effType">—</span></div>
+          <div class="meta-row"><span>Downlink (API)</span><span id="downlink">—</span></div>
+          <div class="meta-row"><span>RTT (API)</span><span id="apiRtt">—</span></div>
+          <div class="meta-row"><span>Last check</span><span id="lastCheck">—</span></div>
+          <div class="meta-row"><span>Jitter</span><span id="jitter">—</span></div>
+        </div>
+      </article>
+    </section>
+
+    <div class="actions">
+      <button class="btn" id="checkBtn" type="button">Check now</button>
+      <button class="btn btn-secondary" id="speedBtn" type="button">Speed test only</button>
+    </div>
+
+    <p class="footer">
+      Works on home hardline / Wi‑Fi / cellular — checks reachability on whatever network this phone is using.
+      <strong>Internet status</strong> = can this device actually reach the internet (live probes).
+      <strong>Link type</strong> = which path it uses — Wi‑Fi / Cellular / Ethernet, shown only when the browser reports it
+      (mostly Android Chrome); iPhone/iPad browsers hide it, so it reads “Unknown” there and switches appear as a drop or “new network”.
+      Probes: Cloudflare, Google connectivity, Firefox detectportal (see README).
+    </p>
+    </main>
+
+    <section id="viewHistory" class="history-view" role="tabpanel" aria-labelledby="tabHistory" hidden>
+      <article class="card summary-card">
+        <p class="card-label">Compact archive · this device</p>
+        <div class="summary-grid" id="histSummary">
+          <div><span class="sum-num" id="sumStretches">0</span><span class="sum-lbl">spotty stretches</span></div>
+          <div><span class="sum-num" id="sumChecks">0</span><span class="sum-lbl">checks counted</span></div>
+          <div><span class="sum-num" id="sumOnline">—</span><span class="sum-lbl">online</span></div>
+          <div><span class="sum-num" id="sumLatency">—</span><span class="sum-lbl">median latency</span></div>
+        </div>
+        <p class="sum-range" id="sumRange">No checks recorded yet.</p>
+        <div class="sum-split" id="sumSplit" hidden>
+          <div class="sum-split-row"><span class="sum-split-lbl">Internet status</span><span class="sum-split-val" id="sumStatus"></span></div>
+          <div class="sum-split-row"><span class="sum-split-lbl">Link type</span><span class="sum-split-val" id="sumLinks"></span></div>
+        </div>
+        <div class="export-row">
+          <button class="btn" id="exportBtn" type="button">Export as text</button>
+          <button class="btn btn-secondary btn-small" id="copyBtn" type="button" title="Copy the report text">Copy</button>
+        </div>
+        <p class="export-hint" id="exportHint">
+          Creates a compact plain <strong>.txt</strong> report: summary + every archived spotty / outage stretch
+          (+ a few recent checks). Attach it to an email or message for your ISP or IT.
+        </p>
+        <p class="archive-note" id="archiveNote">Compact archive: stretch summaries + running totals + last 50 checks.</p>
+      </article>
+
+      <h3 class="section-title">Spotty &amp; outage stretches</h3>
+      <div class="stretch-list" id="stretchList">
+        <p class="empty">No spotty stretches detected. 🎉</p>
+      </div>
+
+      <details class="recent-details" id="recentDetails">
+        <summary class="section-title">Recent checks <span class="section-sub" id="checksSub"></span></summary>
+        <ol class="check-list" id="checkList"></ol>
+        <button class="btn btn-secondary btn-small more-btn" id="moreBtn" type="button" hidden>Show all</button>
+      </details>
+
+      <button class="btn btn-danger" id="clearBtn" type="button">Clear history</button>
+      <p class="footer">
+        Lean archive: Net Pulse keeps stretch summaries (newest 300) and running totals, plus only the
+        last 50 raw checks — a few dozen KB at most. Stored only in this browser; nothing is uploaded.
+        Checks run every ~10 s while the app is open.
+      </p>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="./history.js" defer></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
