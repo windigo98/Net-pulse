@@ -4,7 +4,7 @@ Phone-first Progressive Web App that checks **real internet connectivity**, **la
 
 **Live site:** https://windigo98.github.io/Net-pulse/
 
-The in-app **Tip on Cash App** button goes to https://cash.app/$windigo98.
+At the top: **Share** opens the phone share sheet (or copies the link and shows **Copied!**), **Feedback** emails dovewingsbusiness@gmail.com, and **Tip on Cash App** goes to https://cash.app/$windigo98.
 
 ## What it tells you
 
@@ -84,7 +84,7 @@ Helper script:
 
 ## Tip
 
-Net Pulse is free. If it is useful, tap **Tip on Cash App** at the top of the app, or open https://cash.app/$windigo98.
+Net Pulse is free. If it is useful, tap **Tip on Cash App** at the top of the app, or open https://cash.app/$windigo98. **Feedback** beside it opens a message to dovewingsbusiness@gmail.com. **Share** sends https://windigo98.github.io/Net-pulse/ — the system share sheet when the phone has one, otherwise the button copies that link and reads **Copied!**.
 
 ## Add to Home Screen
 

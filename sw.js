@@ -1,7 +1,7 @@
 /* Net Pulse service worker — caches the app shell for offline UI.
    URLs are resolved from the registration scope so a GitHub Pages project
    site (https://windigo98.github.io/Net-pulse/) caches /Net-pulse/ assets. */
-const CACHE = 'net-pulse-v7';
+const CACHE = 'net-pulse-v8';
 const SHELL_PATHS = [
   './',
   './index.html',

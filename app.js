@@ -80,6 +80,7 @@
     speedBtn: document.getElementById('speedBtn'),
     toast: document.getElementById('toast'),
     installHint: document.getElementById('installHint'),
+    shareBtn: document.getElementById('shareBtn'),
     // History view
     tabLive: document.getElementById('tabLive'),
     tabHistory: document.getElementById('tabHistory'),
@@ -1022,6 +1023,92 @@
     if (!e.key || e.key.startsWith('netpulse.')) onHistoryChanged();
   });
 
+  /** Published project site. Capital N matches the GitHub repo name. */
+  const PAGES_SHARE_URL = 'https://windigo98.github.io/Net-pulse/';
+
+  function sharePageUrl() {
+    try {
+      if (location.hostname.endsWith('github.io')) return PAGES_SHARE_URL;
+      let path = location.pathname;
+      if (path.endsWith('/index.html')) path = path.slice(0, -'index.html'.length);
+      if (!path.endsWith('/')) path += '/';
+      if (/^https?:$/.test(location.protocol)) return new URL(path, location.origin).href;
+    } catch (e) { /* use the published URL */ }
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical && canonical.href) return canonical.href;
+    return PAGES_SHARE_URL;
+  }
+
+  function legacyCopy(url) {
+    return new Promise((resolve, reject) => {
+      const field = document.createElement('textarea');
+      field.value = url;
+      field.setAttribute('readonly', '');
+      field.style.position = 'fixed';
+      field.style.top = '0';
+      field.style.left = '-9999px';
+      document.body.appendChild(field);
+      field.focus();
+      field.select();
+      try {
+        const ok = document.execCommand('copy');
+        field.remove();
+        if (ok) resolve();
+        else reject(new Error('copy failed'));
+      } catch (error) {
+        field.remove();
+        reject(error);
+      }
+    });
+  }
+
+  function flashCopied(button) {
+    const label = button.getAttribute('data-share-label') || 'Share';
+    clearTimeout(flashCopied._t);
+    button.textContent = 'Copied!';
+    button.classList.add('is-copied');
+    button.setAttribute('aria-label', 'Net Pulse link copied');
+    flashCopied._t = setTimeout(() => {
+      button.textContent = label;
+      button.classList.remove('is-copied');
+      button.setAttribute('aria-label', 'Share Net Pulse');
+    }, 1600);
+  }
+
+  function copyPageUrl(button, url) {
+    const write = navigator.clipboard && navigator.clipboard.writeText
+      ? navigator.clipboard.writeText(url)
+      : Promise.reject(new Error('clipboard unavailable'));
+    return write.then(
+      () => flashCopied(button),
+      () => legacyCopy(url).then(() => flashCopied(button))
+    );
+  }
+
+  function wireShare() {
+    const button = el.shareBtn;
+    if (!button) return;
+    const label = (button.textContent || 'Share').replace(/\s+/g, ' ').trim() || 'Share';
+    button.setAttribute('data-share-label', label);
+    button.setAttribute('aria-live', 'polite');
+    button.addEventListener('click', () => {
+      const url = sharePageUrl();
+      const payload = {
+        title: 'Net Pulse',
+        text: 'Check real internet connectivity, latency, and speed.',
+        url
+      };
+      if (typeof navigator.share !== 'function') {
+        copyPageUrl(button, url).catch(() => showToast('Could not copy the link'));
+        return;
+      }
+      navigator.share(payload).catch((error) => {
+        if (error && error.name === 'AbortError') return;
+        return copyPageUrl(button, url);
+      }).catch(() => showToast('Could not copy the link'));
+    });
+  }
+
   // Install hint for iOS / Android
   function updateInstallHint() {
     const isStandalone =
@@ -1073,6 +1160,7 @@
       5000
     ), 600);
   }
+  wireShare();
   applyRoute();
   updateHistoryCount();
   renderHistory();
