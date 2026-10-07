@@ -191,6 +191,7 @@ These are UX heuristics for phone browsing / video — not SLA guarantees.
 ├── manifest.webmanifest
 ├── serve.sh
 ├── README.md
+├── LICENSE
 └── icons/
     ├── icon.svg
     ├── icon-192.png
@@ -214,3 +215,7 @@ Asset links are relative (`./`) and the service worker scope follows the page di
 ## Privacy
 
 Checks run entirely in your browser against public connectivity/CDN endpoints. No analytics backend, no accounts, no API keys. History stays on the device unless you export/share it yourself.
+
+## License
+
+Copyright (c) 2026 WingsCrew (windigo98). All rights reserved. The source is published for viewing only. See [LICENSE](LICENSE).

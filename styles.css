@@ -425,6 +425,14 @@ body {
   border-radius: 6px;
 }
 
+.copyright {
+  margin: 10px 0 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
 .toast {
   position: fixed;
   left: 50%;
