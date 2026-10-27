@@ -1,7 +1,7 @@
 /* Net Pulse service worker — caches the app shell for offline UI.
    URLs are resolved from the registration scope so a GitHub Pages project
    site (https://windigo98.github.io/Net-pulse/) caches /Net-pulse/ assets. */
-const CACHE = 'net-pulse-v9';
+const CACHE = 'net-pulse-v10';
 const SHELL_PATHS = [
   './',
   './index.html',
@@ -12,7 +12,9 @@ const SHELL_PATHS = [
   './icons/icon.svg',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './icons/apple-touch-icon.png'
+  './icons/apple-touch-icon.png',
+  './assets/brand/logo.webp',
+  './assets/brand/logo.png'
 ];
 
 function shellUrls() {
