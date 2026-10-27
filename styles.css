@@ -51,7 +51,7 @@ body {
 
 .header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 18px;
@@ -106,13 +106,14 @@ body {
 }
 
 .credit img {
-  width: 20px;
-  height: 27px;
+  width: 28px;
+  height: 38px;
   object-fit: contain;
   display: block;
   flex-shrink: 0;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.92);
+  border-radius: 7px;
+  background: #f8fafc;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.28);
 }
 
 .credit:active { opacity: 0.8; }
@@ -130,6 +131,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 6px 10px;
+  margin-top: 2px;
   white-space: nowrap;
 }
 
