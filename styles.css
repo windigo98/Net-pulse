@@ -92,6 +92,37 @@ body {
   color: var(--muted);
 }
 
+.credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+  color: #7dd3fc;
+  font-size: 0.72rem;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.credit img {
+  width: 20px;
+  height: 27px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.credit:active { opacity: 0.8; }
+
+.credit:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 .install-hint {
   font-size: 0.72rem;
   color: var(--muted);
@@ -111,7 +142,8 @@ body {
 
 .share-btn,
 .feedback-btn,
-.tip-btn {
+.tip-btn,
+.more-brand-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -155,13 +187,22 @@ body {
   box-shadow: 0 8px 22px rgba(0, 200, 83, 0.28);
 }
 
+.more-brand-btn {
+  grid-column: 1 / -1;
+  border: 1px solid rgba(125, 211, 252, 0.45);
+  color: #e0f2fe;
+  background: rgba(14, 165, 233, 0.12);
+}
+
 .share-btn:active,
 .feedback-btn:active,
-.tip-btn:active { transform: scale(0.98); }
+.tip-btn:active,
+.more-brand-btn:active { transform: scale(0.98); }
 
 .share-btn:focus-visible,
 .feedback-btn:focus-visible,
-.tip-btn:focus-visible {
+.tip-btn:focus-visible,
+.more-brand-btn:focus-visible {
   outline: 2px solid var(--cyan);
   outline-offset: 3px;
 }
@@ -431,6 +472,19 @@ body {
   color: var(--muted);
   font-size: 0.72rem;
   line-height: 1.45;
+}
+
+.copyright a {
+  color: #7dd3fc;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.copyright a:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 .toast {
